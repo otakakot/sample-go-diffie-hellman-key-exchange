@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Sample Helman Diff Key Exchange APP
+  description: |-
+    This is the Sample Helman Diff Key Exchange APP API documentation.
+  termsOfService: https://localhost:8080
+  contact:
+    email: kotaro.otaka@example.com
+  license:
+    name: Apache 2.0
+  version: 0.0.1
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Session
+    description: Session
+  - name: Password
+    description: Password
+paths:
+  /sessions:
+    post:
+      tags:
+        - Session
+      summary: Create Session
+      description: Create Session
+      operationId: createSession
+      requestBody:
+        description: Create Session
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionRequestSchema'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSessionResponseSchema'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseSchema'
+  /passwords:
+    post:
+      tags:
+        - Password
+      summary: Submit Password
+      description: Submit Password
+      operationId: submitPassword
+      requestBody:
+        description: Submit Password
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitPasswordRequestSchema'
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseSchema'
+components:
+  schemas:
+    CreateSessionRequestSchema:
+      type: object
+      properties:
+        encoded_public_key:
+          type: string
+          format: byte
+          description: encoded public key
+      required:
+        - encoded_public_key
+    CreateSessionResponseSchema:
+      type: object
+      properties:
+        session:
+          type: string
+          description: session
+        encoded_public_key:
+          type: string
+          format: byte
+          description: encoded public key
+      required:
+        - session
+        - encoded_public_key
+    SubmitPasswordRequestSchema:
+      type: object
+      properties:
+        session:
+          type: string
+          description: session
+        encrypted_password:
+          type: string
+          description: encrypted password
+      required:
+        - session
+        - encrypted_password
+    ErrorResponseSchema:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
